@@ -7,11 +7,18 @@ namespace Kaiju\KeywordDensity;
 use Kaiju\Snowball\Stemmer\Stemmer;
 use Kaiju\Snowball\StemmerFactory;
 use Kaiju\Stopwords\Stopwords;
+use Soundasleep\Html2Text;
 use voku\helper\UTF8;
+use writecrow\Lemmatizer\Lemmatizer;
 
 class KeywordDensity
 {
-    private bool $stemmer_normalisation = false;
+    const DEFAULT_MAX_KEYWORD_LENGTH = 50;
+    const DEFAULT_MIN_KEYWORD_LENGTH = 3;
+
+    private bool $stemming = false;
+
+    private bool $lemmatize = false;
 
     private string $lang;   // en|ru|fr|de|...
 
@@ -20,13 +27,19 @@ class KeywordDensity
     /**
      * @var string[]
      */
-    private array $words = [];
+    private array $keywords = [];
 
     private Stemmer $stemmer; // stemmer instance
 
     private array $words_rank = [];
 
     private Stopwords $stopWords;
+
+    private int $keywordCount = 0;
+
+    private int $minKeywordLength = self::DEFAULT_MIN_KEYWORD_LENGTH;
+
+    private int $maxKeywordLength = self::DEFAULT_MAX_KEYWORD_LENGTH;
 
     public function __construct(string $lang = 'en')
     {
@@ -40,7 +53,7 @@ class KeywordDensity
      */
     public function getWords(): array
     {
-        return $this->words;
+        return $this->keywords;
     }
 
     public function getText(): string
@@ -48,22 +61,26 @@ class KeywordDensity
         return $this->text;
     }
 
+    public function setHtml(string $html): void
+    {
+        $this->setText(Html2Text::convert($html, ['ignore_errors' => true, 'drop_links' => true]));
+    }
+
     public function setText(string $text): void
     {
         $this->text = strip_tags($text);
-        $this->words = [];
+        $this->keywords = [];
     }
 
-    public function setStemmerNormalisation(bool $normalize): void
+    public function calcDensity(): void
     {
-        $this->stemmer_normalisation = $normalize;
+        $this->splitWords();
+        $this->words_rank = array_count_values($this->keywords);
+        arsort($this->words_rank);
     }
 
     public function getPopularWords(int $max = -1): array
     {
-        $this->splitWords();
-        $this->words_rank = array_count_values($this->words);
-        arsort($this->words_rank);
         if ($max > 0) {
             return array_keys(array_slice($this->words_rank, 0, $max));
         }
@@ -73,12 +90,14 @@ class KeywordDensity
 
     private function splitWords(): void
     {
-        $this->words = [];
+        $this->keywordCount = 0;
+        $this->keywords = [];
         $words = $this->stopWords->strip($this->text);
         foreach ($words as $word) {
-            $word = $this->prepareWord($word);
+            $word = $this->normalizeWord($word);
             if (!blank($word)) {
-                $this->words[] = $word;
+                ++$this->keywordCount;
+                $this->keywords[] = $word;
             }
         }
 
@@ -93,19 +112,78 @@ class KeywordDensity
         */
     }
 
-    public function prepareWord(string $word): string
+    public function normalizeWord(string $word): string
     {
         $word = UTF8::strtolower($word);
-
-        if ((!ctype_digit($word) && UTF8::strlen($word) <= 1)
-            || $this->stopWords->isStopword($word)) {
+        $len = UTF8::strlen($word);
+        if (ctype_digit($word) ||
+            $len <= $this->getMinKeywordLength() ||
+            $len >= $this->getMaxKeywordLength() ||
+            $this->stopWords->isStopword($word)) {
             return '';
         }
 
-        if ($this->stemmer_normalisation) {
+        if ($this->stemming) {
             $word = $this->stemmer->stem($word);
+        } elseif ($this->lemmatize) {
+            $word = Lemmatizer::getLemma($word);
         }
 
         return $word;
+    }
+
+    public function getMinKeywordLength(): int
+    {
+        return $this->minKeywordLength;
+    }
+
+    public function setMinKeywordLength(int $minKeywordLength): void
+    {
+        $this->minKeywordLength = $minKeywordLength;
+    }
+
+    public function getMaxKeywordLength(): int
+    {
+        return $this->maxKeywordLength;
+    }
+
+    public function setMaxKeywordLength(int $maxKeywordLength): void
+    {
+        $this->maxKeywordLength = $maxKeywordLength;
+    }
+
+    public function getWordsRank(int $max = -1): array
+    {
+        $words = $max > 0 ? array_slice($this->words_rank, 0, $max) : $this->words_rank;
+        $keywords = [];
+        foreach ($words as $word => $count) {
+            $percent = 100 / $this->keywordCount * $count;
+            $keywords[] = [
+                'keyword' => $word,
+                'count' => $count,
+                'percent' => round($percent, 1),
+            ];
+        }
+
+        return $keywords;
+    }
+
+    public function getKeywordCount(): int
+    {
+        return $this->keywordCount;
+    }
+
+    public function setStemming(bool $enabled): self
+    {
+        $this->stemming = $enabled;
+
+        return $this;
+    }
+
+    public function setLemmatize(bool $enabled): self
+    {
+        $this->lemmatize = $enabled;
+
+        return $this;
     }
 }

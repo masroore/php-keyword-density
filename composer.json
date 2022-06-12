@@ -28,7 +28,9 @@
         "php": "^8.0 || ^8.1",
         "masroore/php-stemmer": "^3.0",
         "masroore/stopwords": "^1.0",
-        "voku/portable-utf8": "^6.0"
+        "soundasleep/html2text": "^2.0",
+        "voku/portable-utf8": "^6.0",
+        "writecrow/lemmatizer": "dev-master"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8",
