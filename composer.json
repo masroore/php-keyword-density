@@ -1,6 +1,6 @@
 {
-    "name": "masroore/word-frequency",
-    "description": "Word frequency counter. Keyword density analyzer.",
+    "name": "masroore/keyword-density",
+    "description": "Keyword density analyzer. Word frequency counter.",
     "keywords": [
         "word-frequency",
         "keyword-density",
@@ -15,7 +15,7 @@
         "text",
         "html"
     ],
-    "homepage": "https://github.com/masroore/php-word-frequency",
+    "homepage": "https://github.com/masroore/php-keyword-density",
     "license": "MIT",
     "authors": [
         {
@@ -26,7 +26,9 @@
     ],
     "require": {
         "php": "^8.0 || ^8.1",
-        "masroore/stopwords": "^1.0"
+        "masroore/php-stemmer": "^3.0",
+        "masroore/stopwords": "^1.0",
+        "voku/portable-utf8": "^6.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8",
@@ -42,19 +44,19 @@
     },
     "autoload": {
         "psr-4": {
-            "Kaiju\\WordFrequency\\": "src"
+            "Kaiju\\KeywordDensity\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Kaiju\\WordFrequency\\Tests\\": "tests"
+            "Kaiju\\KeywordDensity\\Tests\\": "tests"
         }
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",
+        "fix": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
         "test": "vendor/bin/phpunit tests",
-        "test-coverage": "vendor/bin/pest --coverage",
-        "fix": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+        "test-coverage": "vendor/bin/pest --coverage"
     },
     "config": {
         "preferred-install": "dist",
