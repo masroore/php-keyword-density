@@ -1,17 +1,13 @@
 # PHP Keyword Density, Word Frequency
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/masroore/keyword-density.svg?style=flat-square)](https://packagist.org/packages/masroore/keyword-density)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/masroore/keyword-density/run-tests?label=tests)](https://github.com/masroore/keyword-density/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/masroore/keyword-density/Check%20&%20fix%20styling?label=code%20style)](https://github.com/masroore/keyword-density/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/masroore/php-keyword-density/run-tests?label=tests)](https://github.com/masroore/keyword-density/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/masroore/php-keyword-density/Check%20&%20fix%20styling?label=code%20style)](https://github.com/masroore/php-keyword-density/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/masroore/keyword-density.svg?style=flat-square)](https://packagist.org/packages/masroore/keyword-density)
 
-Calculates the keyword density of a text as described in [Wikipedia](https://en.wikipedia.org/wiki/Keyword_density).
-Counts the frequency usage of each word in a text.
+Calculates the keyword density of a text as described in [Wikipedia](https://en.wikipedia.org/wiki/Keyword_density). Counts the frequency usage of each word in a text.
 
-Collision was created by, and is maintained by **[Masroor Ehsan](https://github.com/masroore)**, and is a PHP package
-calculate the keyword density of a text as described in [Wikipedia](https://en.wikipedia.org/wiki/Keyword_density).
-Keyword density is the percentage of times a keyword or phrase appears on a text compared to the total number of words
-on the text. The word frequency counter PHP package can be used to count the frequency usage of each word in a text.
+Keyword density is the percentage of times a keyword or phrase appears on a text compared to the total number of words on the text. The word frequency counter PHP package can be used to count the frequency usage of each word in a text.
 
 ## Installation
 
