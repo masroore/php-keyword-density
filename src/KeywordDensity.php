@@ -83,7 +83,7 @@ class KeywordDensity
         }
 
         /*
-        preg_match_all('/\\pL+/ui', $this->text, $m);
+        preg_match_all('/\pL+/ui', $this->text, $m);
         foreach ($m[0] as $word) {
             $word = $this->prepareWord($word);
             if (!blank($word)) {
