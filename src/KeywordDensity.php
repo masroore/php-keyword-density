@@ -95,7 +95,7 @@ class KeywordDensity
         $words = $this->stopWords->strip($this->text);
         foreach ($words as $word) {
             $word = $this->normalizeWord($word);
-            if (!blank($word)) {
+            if (!empty($word)) {
                 ++$this->keywordCount;
                 $this->keywords[] = $word;
             }
