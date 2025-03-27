@@ -95,7 +95,7 @@ class KeywordDensity
         $words = $this->stopWords->strip($this->text);
         foreach ($words as $word) {
             $word = $this->normalizeWord($word);
-            if (!blank($word)) {
+            if (!is_blank($word)) {
                 ++$this->keywordCount;
                 $this->keywords[] = $word;
             }
@@ -105,7 +105,7 @@ class KeywordDensity
         preg_match_all('/\pL+/ui', $this->text, $m);
         foreach ($m[0] as $word) {
             $word = $this->prepareWord($word);
-            if (!blank($word)) {
+            if (!is_blank($word)) {
                 $this->words[] = $word;
             }
         }
