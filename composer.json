@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "php": "^8.0 || ^8.1",
+        "php": "^8.0 || ^8.1 || ^8.2 || ^8.3 || ^8.4",
         "masroore/php-stemmer": "^3.0",
         "masroore/stopwords": "^1.0",
         "soundasleep/html2text": "^2.0",
